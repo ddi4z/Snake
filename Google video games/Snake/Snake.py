@@ -79,7 +79,7 @@ cell_number = 20
 screen = pygame.display.set_mode((cell_number * cell_size, cell_number * cell_size ))
 clock = pygame.time.Clock()
 main_game = MAIN()
-
+apple =  pygame.image.load("Graphics/apple.png").convert_alpha()
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
