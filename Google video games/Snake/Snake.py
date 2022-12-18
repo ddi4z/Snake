@@ -1,8 +1,5 @@
-import pygame
-import sys
-import random
+import pygame,sys,random
 from pygame.math import Vector2
-
 
 class MAIN:
     def __init__(self):
@@ -37,6 +34,7 @@ class MAIN:
         for block in self.snake.body[1:]:
             if block == self.snake.body[0]:
                 self.game_over()
+
     def game_over(self):
         self.snake.reset()
 
@@ -53,6 +51,7 @@ class MAIN:
                     if col%2 !=0:
                         grass_rect = pygame.Rect(col * cell_size, row * cell_size,cell_size,cell_size)
                         pygame.draw.rect(screen,grass_color,grass_rect)
+
     def draw_score(self):
         score_text = str(len(self.snake.body) - 3)
         score_surface = game_font.render(score_text,True,(56,74,12))
@@ -67,34 +66,34 @@ class MAIN:
         screen.blit(score_surface,score_rect)
         screen.blit(apple,apple_rect)
 
-    
 
 class SNAKE:
     def __init__(self) -> None:
         self.body = [Vector2(7,10),Vector2(6,10),Vector2(5,10)]
         self.direction = Vector2(1,0)
         self.new_block = False
+              
+        color="black"
         
-        self.head_up = pygame.image.load('Snake\Graphics\\head_up.png').convert_alpha()
-        self.head_down = pygame.image.load('Snake\Graphics\\head_down.png').convert_alpha()
-        self.head_right = pygame.image.load('Snake\Graphics\\head_right.png').convert_alpha()
-        self.head_left = pygame.image.load('Snake\Graphics\\head_left.png').convert_alpha()
+        self.head_up = pygame.image.load(f'Snake\Graphics\\{color}\\head_up.png').convert_alpha()
+        self.head_down = pygame.image.load(f'Snake\Graphics\\{color}\\head_down.png').convert_alpha()
+        self.head_right = pygame.image.load(f'Snake\Graphics\\{color}\\head_right.png').convert_alpha()
+        self.head_left = pygame.image.load(f'Snake\Graphics\\{color}\\head_left.png').convert_alpha()
 		
-        self.tail_up = pygame.image.load('Snake\Graphics\\tail_up.png').convert_alpha()
-        self.tail_down = pygame.image.load('Snake\Graphics\\tail_down.png').convert_alpha()
-        self.tail_right = pygame.image.load('Snake\Graphics\\tail_right.png').convert_alpha()
-        self.tail_left = pygame.image.load('Snake\Graphics\\tail_left.png').convert_alpha()
+        self.tail_up = pygame.image.load(f'Snake\Graphics\\{color}\\tail_up.png').convert_alpha()
+        self.tail_down = pygame.image.load(f'Snake\Graphics\\{color}\\tail_down.png').convert_alpha()
+        self.tail_right = pygame.image.load(f'Snake\Graphics\\{color}\\tail_right.png').convert_alpha()
+        self.tail_left = pygame.image.load(f'Snake\Graphics\\{color}\\tail_left.png').convert_alpha()
 
-        self.body_vertical = pygame.image.load('Snake\Graphics\\body_vertical.png').convert_alpha()
-        self.body_horizontal = pygame.image.load('Snake\Graphics\\body_horizontal.png').convert_alpha()
+        self.body_vertical = pygame.image.load(f'Snake\Graphics\\{color}\\body_vertical.png').convert_alpha()
+        self.body_horizontal = pygame.image.load(f'Snake\Graphics\\{color}\\body_horizontal.png').convert_alpha()
 
-        self.body_tr = pygame.image.load('Snake\Graphics\\body_tr.png').convert_alpha()
-        self.body_tl = pygame.image.load('Snake\Graphics\\body_tl.png').convert_alpha()
-        self.body_br = pygame.image.load('Snake\Graphics\\body_br.png').convert_alpha()
-        self.body_bl = pygame.image.load('Snake\Graphics\\body_bl.png').convert_alpha()
+        self.body_tr = pygame.image.load(f'Snake\Graphics\\{color}\\body_tr.png').convert_alpha()
+        self.body_tl = pygame.image.load(f'Snake\Graphics\\{color}\\body_tl.png').convert_alpha()
+        self.body_br = pygame.image.load(f'Snake\Graphics\\{color}\\body_br.png').convert_alpha()
+        self.body_bl = pygame.image.load(f'Snake\Graphics\\{color}\\body_bl.png').convert_alpha()
         
         self.crunch_sound = pygame.mixer.Sound('Snake\Sound\\crunch.wav')
-
 
     def draw_snake(self):
         self.update_head_graphics()
@@ -140,10 +139,6 @@ class SNAKE:
         elif tail_relation == Vector2(0,1): self.tail = self.tail_up
         elif tail_relation == Vector2(0,-1): self.tail = self.tail_down
 
-     
-
-
-
     def move_snake(self):
         if self.new_block == True:
             body_copy = self.body[:]
@@ -162,7 +157,8 @@ class SNAKE:
     def reset(self):
         self.body = [Vector2(7,10),Vector2(6,10),Vector2(5,10)]
         self.direction = Vector2(1,0)
-        
+
+
 class FRUIT:
     def __init__(self) -> None:
         self.randomize()
@@ -176,6 +172,34 @@ class FRUIT:
         self.y = random.randint(0,cell_number -1)
         self.pos = Vector2(self.x,self.y)
 
+
+def game_screen():
+    while True:
+        for event in pygame.event.get():
+            if event.type == SCREEN_UPDATE:
+                main_game.update()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    if main_game.snake.direction.y !=1:
+                        main_game.snake.direction = Vector2 (0,-1)
+                if event.key == pygame.K_DOWN:
+                    if main_game.snake.direction.y !=-1:
+                        main_game.snake.direction = Vector2 (0,1)
+                if event.key == pygame.K_LEFT:
+                    if main_game.snake.direction.x !=1:
+                        main_game.snake.direction = Vector2 (-1,0)
+                if event.key == pygame.K_RIGHT:
+                    if main_game.snake.direction.x !=-1:
+                        main_game.snake.direction = Vector2 (1,0)
+
+        screen.fill((175,215,70))
+        main_game.draw_elements()
+        pygame.display.update()
+        clock.tick(60)
+
+
+
+
 pygame.mixer.pre_init(44100,-16,2,512)
 pygame.init()
 cell_size = 40
@@ -183,35 +207,8 @@ cell_number = 20
 screen = pygame.display.set_mode((cell_number * cell_size, cell_number * cell_size ))
 clock = pygame.time.Clock()
 main_game = MAIN()
-apple =  pygame.image.load('Snake\Graphics\\apple.png').convert_alpha()
+apple =  pygame.image.load("Snake\Graphics\\food\\apple.png").convert_alpha()
 game_font = pygame.font.Font('Snake\Font\\PoetsenOne-Regular.ttf',25)
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
-
-while True:
-    for event in pygame.event.get():
-        if event.type == SCREEN_UPDATE:
-            main_game.update()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                if main_game.snake.direction.y !=1:
-                    main_game.snake.direction = Vector2 (0,-1)
-            if event.key == pygame.K_DOWN:
-                if main_game.snake.direction.y !=-1:
-                    main_game.snake.direction = Vector2 (0,1)
-            if event.key == pygame.K_LEFT:
-                if main_game.snake.direction.x !=1:
-                    main_game.snake.direction = Vector2 (-1,0)
-            if event.key == pygame.K_RIGHT:
-                if main_game.snake.direction.x !=-1:
-                    main_game.snake.direction = Vector2 (1,0)
-
-        
-    screen.fill((175,215,70))
-    main_game.draw_elements()
-    pygame.display.update()
-    clock.tick(60)
-
-
-
-
+game_screen()
