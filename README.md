@@ -10,7 +10,7 @@ A recreation of the Google snake game using pygame
 ![Classic Game](Snake/Assets_readme/classic.png)
 
 ### Two snakes
-![Two_snakes](Snake/Assets_readme/2 snakes.png)
+![Two_snakes](Snake/Assets_readme/snakes.png)
 
 ## Modifiers
 * Amount of fruits on screen. It can be 1,3 or 5
