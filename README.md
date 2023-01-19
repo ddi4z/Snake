@@ -5,8 +5,8 @@ A recreation of the Google snake game using pygame
 * Python 
 * Pygame
 
-## Established game modes.
-### Classic game mode.
+## Established game modes
+### Classic game mode
 ![Classic Game](Snake/Assets_readme/classic.png)
 
 ### Two snakes
